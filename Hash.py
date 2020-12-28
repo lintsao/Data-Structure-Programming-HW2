@@ -16,7 +16,6 @@ if __name__ == "__main__":
     # initial
     password_file = sys.argv[1] # password.txt
     list_pa2_file = sys.argv[2] # list_pa2.txt
-    mode = sys.argv[3] # mode
     path = './'
 
     # read password.txt
@@ -47,37 +46,37 @@ if __name__ == "__main__":
     file.close()
     print('finish Dictionary.txt')
 
+    # read Dictionary.txt
     Dictionary = open(os.path.join(path, 'Dictionary.txt'), 'r').readlines() 
-    if mode == 'summit':
-        # read Dictionary.txt
-        # read list_pa2.txt
-        list_pa2 = open(list_pa2_file, 'r').readlines()
-        # write results_pa2.txt
-        file = open(os.path.join(path, 'results_pa2.txt'), 'w')
+    # read list_pa2.txt
+    list_pa2 = open(list_pa2_file, 'r').readlines()
+    # write results_pa2.txt
+    file = open(os.path.join(path, 'results_pa2.txt'), 'w')
 
-        for hash in list_pa2:
-            initial = False
-            hash = hash.replace('\n', '')
-            for i in range(len(Dictionary)): # search
-                if hash == Dictionary[i][11:-1]:
-                    initial = True
-                    break
-            if initial == False:
-                file.write(hash + ' ' + '******' + ' ' + '***' + ' ' + str(i+1))
-                file.write('\n')
-            else:
-                file.write(hash + ' ' + Dictionary[i][:6] + ' ' + Dictionary[i][7:10] + ' ' + str(i+1))
-                file.write('\n')
-        file.close()
-
-    else:
-        input_value = input('Please input a hash value：')
+    for hash in list_pa2:
         initial = False
-        for i in range(len(Dictionary)):
-            if input_value == Dictionary[i][11:-1]:
-                print('success! The password is {}, salt value is {}, {} entries have been searched'.format(
-                    Dictionary[i][:6],  Dictionary[i][7:10], str(i+1)))
+        hash = hash.replace('\n', '')
+        for i in range(len(Dictionary)): # search
+            if hash == Dictionary[i][11:-1]:
                 initial = True
                 break
         if initial == False:
-            print('failure!, {} entries have been searched'.format(str(i+1)))
+            file.write(hash + ' ' + '******' + ' ' + '***' + ' ' + str(i+1))
+            file.write('\n')
+        else:
+            file.write(hash + ' ' + Dictionary[i][:6] + ' ' + Dictionary[i][7:10] + ' ' + str(i+1))
+            file.write('\n')
+    file.close()
+    print('finish results_pa2.txt')
+
+    # user search
+    input_value = input('Please input a hash value：')
+    initial = False
+    for i in range(len(Dictionary)):
+        if input_value == Dictionary[i][11:-1]:
+            print('success! The password is {}, salt value is {}, {} entries have been searched'.format(
+                Dictionary[i][:6],  Dictionary[i][7:10], str(i+1)))
+            initial = True
+            break
+    if initial == False:
+        print('failure!, {} entries have been searched'.format(str(i+1)))
